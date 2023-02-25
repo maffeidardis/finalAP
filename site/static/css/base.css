@@ -1,0 +1,232 @@
+/* Global FONT */
+@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic);
+
+/* Global CSS */
+html, body{font-size:18px;}
+div.disabled {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+h2, h4, h5, label, input, h6, a, button, p, span {
+    font-family:  'PT Sans', sans-serif;
+    text-decoration:none;
+    letter-spacing: 0.5px;
+}
+
+h2, h4, h5, p, td, tr, ul, li {
+    color: #011689 !important;
+}
+
+
+h1, h2, h3{
+    font-family: 'PT Sans', sans-serif;
+    text-decoration:none;
+    letter-spacing: 0.5px;
+    color: #011689 !important;
+}
+
+img {
+  display: block;
+  max-width:100%;
+  max-height:300;
+  width: auto;
+  height: auto;
+}
+
+a{color:'#00457c'}
+
+.blue{color:'#00457c'}
+
+/* Material Icons */
+.material-icons{
+    font-family:'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size:22px;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-setting: 'liga';
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://example.com/MaterialIcons-Regular.eot);
+    src: local('MaterialIcons-Regular'),
+        url("{{ url_for('static', filename='css/material-icons.woff2') }}") format('woff2')
+}
+
+.navbar {
+     border-radius: 10px;
+     margin-top: 2%;
+}
+
+.principal {
+     width:80%;
+}
+
+#fornecerCPF {
+    background-color: #011689 !important;
+}
+
+#inputForm {
+    background-color: #011689 !important;
+}
+
+
+.alert {
+  padding: 12px;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.error {
+  padding: 12px;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: darkred;
+  background-color: red;
+  color: white;
+}
+
+.info {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: green;
+  background-color: green;
+  color: white;
+}
+
+.botao-geral{
+    border-radius: 15px;
+    border: 1px solid #011689;
+    background-color: #011689;
+    color: #fff;
+    text-transform: uppercase;
+    height: 40px;
+    padding: 0 30px;
+    position: absolute;
+    transition: .5s;
+    cursor: pointer;
+
+}
+
+.botao-geral:hover{
+    background-color: #fff;
+    color: #011689;
+}
+
+.botao-geral:focus{
+    border-color: #011689;
+    box-shadow: 0 0 8px 0 #011689;
+    outline: 0;
+}
+
+.root-container{
+    margin-top:25%;
+}
+
+
+footer p, #textoExtra p {
+    font-size: 13px;
+    margin: 0;
+    color: #36B3E3;
+    font-family: "PT Sans",sans-serif;
+}
+
+footer .blue-dark {
+    color: #011787;
+    font-weight: bold;
+}
+.mb-3, .my-3 {
+    margin-bottom: 1rem !important;
+}
+
+footer .copyright-text {
+    color: #36B3E3;
+    letter-spacing: .4rem;
+}
+
+footer, #textoExtra {
+    margin-top:10%;
+}
+
+.pl-4, .px-4 {
+    padding-left: 1.5rem!important;
+    padding-top: 1.5rem !important;
+}
+
+.modal-header {
+  display: block;
+}
+
+@media screen and (min-width: 375px) {
+    .root-container{
+        margin-top: 0% !important;
+    }
+    footer, #textoExtra {
+        margin-top:5% !important;
+    }
+
+    .navbar {
+     width:90%;
+     border-radius: 10px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .navbar {
+     width:100%;
+     border-radius: 0px;
+     margin-top: 0% !important;
+    }
+}
+
+
+@media screen and (min-width: 700px) {
+    .root-container{
+        margin-top: 0% !important;
+    }
+    footer, #textoExtra {
+        margin-top:5% !important;
+    }
+    #bula-profissional{
+        margin-top: 12% !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .root-container{
+        margin-top: 0% !important;
+    }
+    footer, #textoExtra {
+        margin-top:5% !important;
+    }
+    #bula-profissional{
+        margin-top: 8% !important;
+    }
+}
+
+
+
