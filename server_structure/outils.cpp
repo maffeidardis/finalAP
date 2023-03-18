@@ -1,4 +1,7 @@
 #include "base.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <pthread.h>
 #include <unistd.h>
 #include <string.h>
 #include <arpa/inet.h>
@@ -6,7 +9,8 @@
 #include <iostream>
 #include <time.h>
 #include <sys/stat.h>
-#include <limits.h>
+#include <iostream>
+#include <fstream>
 
 int serverSetup (short port, void* (func)(void* acc_s)) {
 
@@ -73,7 +77,10 @@ int serverSetup (short port, void* (func)(void* acc_s)) {
 
 		int* acc_s = new int;
 		*acc_s = accept_socket;
-		pthread_create(&tid, NULL, func, (void*)acc_s);
+
+		if (pthread_create(&tid, NULL, func, (void*)acc_s) != 0) {
+			std::cerr << "pthread_create() error" << std::endl;
+		}
 
 	}
 
@@ -135,39 +142,78 @@ int clientConnection (short port, int argc, char* argv[]) {
     return client_socket;
 }
 
-void printDate(time_t t) {
+char* formatDate(time_t t) {
 	
 	struct tm formatter;
 	localtime_r(&t, &formatter);
-	std::cout << formatter.tm_mday << "/" << formatter.tm_mon+1 << "/" << formatter.tm_year+1900 << " ";
-	std::cout << formatter.tm_hour << ":" << formatter.tm_min << ":" << formatter.tm_sec << std::endl;
+
+	std::string day = std::to_string(formatter.tm_mday);
+	std::string month = std::to_string(formatter.tm_mon+1);
+	std::string year = std::to_string(formatter.tm_year+1900);
+	std::string hour = std::to_string(formatter.tm_hour);
+	std::string minute = std::to_string(formatter.tm_min);
+	std::string second = std::to_string(formatter.tm_sec);
+
+	std::string date_str = day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+	
+	const int length = date_str.length();
+	char* date_char = new char[length + 1];
+	strcpy(date_char, date_str.c_str());
+
+	return date_char;
 
 }
 
 int sendStat (int client_socket, struct stat st) {
 
+	// Send client hostname
+    char hostname[HOST_NAME_MAX];
+    gethostname(hostname, HOST_NAME_MAX);
+    if (write(client_socket, &(hostname), HOST_NAME_MAX) == -1) {
+        std::cerr << "Error writing hostname (sendStat)" << std::endl;
+    }
+
 	// Send file size
-	write(client_socket, &(st.st_size), sizeof(off_t));
+	if (write(client_socket, &(st.st_size), sizeof(off_t)) == -1) {
+		std::cerr << "Error writing size error (sendStat)" << std::endl;
+	}
 
 	// Send last modification time
 	time_t t = st.st_mtime;
-	write(client_socket, &t, sizeof(time_t));
+	if (write(client_socket, &t, sizeof(time_t)) == -1) {
+		std::cerr << "Error writing time (sendStat)" << std::endl;
+	}
 
 	return 0;
 
 }
 
-int readStat (int accept_socket, off_t &filesize, time_t &mtime) {
+int readStat (int accept_socket, off_t &filesize, time_t &mtime, char* filename) {
+
+	// Reading hostname
+    char hostname[HOST_NAME_MAX];
+    if (read(accept_socket, &(hostname), HOST_NAME_MAX) == -1) {
+        std::cerr << "Error reading hostname (readStat)" << std::endl;
+    }
 
 	// Read file size
 	off_t fz;
-	read(accept_socket, &fz, sizeof(off_t));
+	if (read(accept_socket, &fz, sizeof(off_t)) == -1) {
+		std::cerr << "Error reading size (readStat)" << std::endl;
+	}
 	filesize = fz;
 
 	// Read last modification time
 	time_t t = 0;
-	read(accept_socket, &t, sizeof(time_t));
+	if (read(accept_socket, &t, sizeof(time_t)) == -1) {
+		std::cerr << "Error reading time (readTime)" << std::endl;
+	}
 	mtime = t;
+	char* date = formatDate(mtime);
+
+	// Saving stats on a .txt file
+	std::ofstream data(filename);
+	data << hostname << "\n" << date;
 
 	return 0;
 
@@ -183,7 +229,9 @@ int sendFile (int client_socket, char* filename, off_t filesize) {
 		off_t fsw = fread(img, 1, filesize, fp);
 
 		if (filesize == fsw) {
-			write(client_socket, img, filesize);
+			if (write(client_socket, img, filesize) == -1) {
+				std::cerr << "sendFile write img error" << std::endl;
+			}
 			delete []img;
 			fclose(fp);
 			return 0;
@@ -208,7 +256,9 @@ int readFile (int accept_socket, char* filename, off_t filesize) {
 	if (fp != NULL) {
 		
 		char* img = new char[filesize];
-		read(accept_socket, img, filesize);
+		if (read(accept_socket, img, filesize) == -1) {
+			std::cerr << "Error reading image (readFile)" << std::endl;
+		}
 
 		off_t fsw = fwrite(img, 1, filesize, fp);
 		if (filesize == fsw) {
@@ -217,13 +267,13 @@ int readFile (int accept_socket, char* filename, off_t filesize) {
 			return 0;
 		}
 		else {
-			std::cerr << "Error reading file." << std::endl;
+			std::cerr << "Error reading file (readFile)" << std::endl;
 			return -1;
 		}
 	}
 
 	else {
-		std::cerr << "Error opening file." << std::endl;
+		std::cerr << "Error opening file (readFile)" << std::endl;
 		return -1;
 	}
 
