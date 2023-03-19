@@ -4,7 +4,6 @@
 #include <time.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <bits/stdc++.h>
 #include <sys/stat.h>
 
 // Define the function to be called when ctrl-c (SIGINT) is sent to process
