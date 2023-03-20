@@ -18,7 +18,7 @@ void* getImg (void* acc_s) {
     int accept_socket = *((int *)acc_s);
 
     // Folder name with client socket code
-    char foldername[50] = "../images/socket";
+    char foldername[50] = "../website/static/images/socket";
     std::string str = std::to_string(accept_socket);
     char const *socket_str = str.c_str();
     std::strcat(foldername, socket_str); // foldername -> "socketX"
