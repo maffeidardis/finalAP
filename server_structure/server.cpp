@@ -5,10 +5,19 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <bits/stdc++.h>
 
 // Define the function to be called when ctrl-c (SIGINT) is sent to process
 void signal_callback_handler(int signum) {
     std::cout << " Server shutdown" << std::endl;
+
+    struct stat sb;
+    if (stat("../website/static/images", &sb) == 0) {
+        if (system("rm -r ../website/static/images") != 0) {
+            std::cerr << "Error removing static/images folder" << std::endl; // remove images folder if it exists
+        }
+    }
+
     // Terminate program
     exit(signum);
 }
@@ -83,6 +92,14 @@ void* getImg (void* acc_s) {
 }
 
 int main (int argc, char** argv) {
+
+    // Creating folder images
+    struct stat sb;
+    if (stat("../website/static/images", &sb) != 0) {
+        if (system("mkdir ../website/static/images") != 0) {
+            std::cerr << "Error creating static/images folder" << std::endl; // creates folder if doesn't exist
+        }
+    }
 
     signal(SIGINT, signal_callback_handler);
     serverSetup(MY_PORT, getImg);
