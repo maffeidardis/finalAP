@@ -4,8 +4,6 @@ Final Project of the Advanced Programming class at <i><b>ESPCI Paris</b></i>, 20
 ## Introduction
 The goal was to take picutres from each client connected to a server, that hosts a webserver. Then, show the picture of all conecteds clients in this website.
 
-There are some Python dependencies, which can be installed using the following command:
-
 ## Setup
 
 To run this project, follow this:
