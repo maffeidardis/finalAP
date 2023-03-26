@@ -15,7 +15,6 @@
 
 {% block content %}
 <div class="root-container text-left" id="containerInicial">
-  <!-- Div com a descrição do medicamento !-->
   <div class="container">
 
     <!-- First Row-->
@@ -35,10 +34,9 @@
       </div>
     
     <!-- Third row -->
-    <!--<img src="{{ url_for('static', filename='images/a/img-hacker.png') }}" width = '100%' height="300" id="image">-->
     <div class="row">
       {% for dict in list_dict_infos %}
-      <div class="col-6">
+      <div class="col-3">
         <div class="card text-center">
           <img src="{{ dict['img'] }}" width = '100%' height="300" id="image">
           <ul class="list-group list-group-flush">

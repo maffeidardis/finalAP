@@ -11,4 +11,5 @@ pylibdmtx
 pyStrich
 typing-extensions
 Werkzeug
+opencv-python
 zipp

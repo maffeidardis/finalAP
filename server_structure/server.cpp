@@ -5,7 +5,8 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <bits/stdc++.h>
+//If running on Linux, include this tag.
+//#include <bits/stdc++.h>
 
 // Define the function to be called when ctrl-c (SIGINT) is sent to process
 void signal_callback_handler(int signum) {

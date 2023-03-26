@@ -5,22 +5,20 @@ import os
 
 web = Blueprint('web', __name__, template_folder='templates', url_prefix=APP_URL)
 
-@web.route('/code')
+@web.route('')
 def code():
-    listdir = os.listdir('./website/static/images')
+    print(os.getcwd())
+    listdir = os.listdir('./static/images')
     list_dict_infos = []
     #Iterating through all folders
     for file in listdir:
-        dir = os.path.join('./website/static/images', file)
+        dir = os.path.join('./static/images', file)
         #Checking if it's a subfolder
         if os.path.isdir(dir):
             dict_infos = {}
             for subfile in os.listdir(dir):
-                #If it's an image, append path to list_images, 
-                #If it's a txt, append path to list_txt
                 if subfile.endswith('.jpg'):
-                    dict_infos['img'] = os.path.join(dir.replace('./website/static/', '/espci/'), subfile)
-                    #list_images.append(os.path.join(dir.replace('./website/static/', '/espci/'), subfile))
+                    dict_infos['img'] = os.path.join(dir.replace('./static/', '/espci/'), subfile)
                 if subfile.endswith('.txt'):
                     txt = os.path.join(dir, subfile)
                     with open(txt) as f:
