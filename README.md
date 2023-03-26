@@ -35,6 +35,6 @@ $ ./client localhost
 On the third one, we are going to run our website.
 ```
 $ cd website
-$ pip install -r requirements.txt
-$ python website/main.py
+$ python3 -m pip install -r requirements.txt
+$ python3 website/main.py
 ```
