@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <signal.h>
 //If running on Linux, include this tag.
 //#include <bits/stdc++.h>
 
@@ -42,6 +43,8 @@ void* getImg (void* acc_s) {
     if (stat(foldername, &sb) != 0) {
         if (system(command_mkdir) != 0) {
             std::cerr << "Error creating client folder" << std::endl; // creates folder if doesn't exist
+            close(accept_socket);
+            return NULL;
         }
     }
 
@@ -66,12 +69,24 @@ void* getImg (void* acc_s) {
 
         if (read(accept_socket, &flag, sizeof(int)) == -1) {
             std::cerr << "Error reading flag value" << std::endl;
+            close(accept_socket);
+            return NULL;
         }
 
         // flag -> 2: new image coming
         if (flag == 2) {
+            if (readStat(accept_socket, filesize, mtime, data_path) == -1) {
             readStat(accept_socket, filesize, mtime, data_path);
+                std::cerr << "Error reading data file" << std::endl;
+                close(accept_socket);
+                return NULL;
+            }
+            if (readFile(accept_socket, img_path, filesize) == -1) {
             readFile(accept_socket, img_path, filesize);
+                std::cerr << "Error reading image file" << std::endl;
+                close(accept_socket);
+                return NULL;
+            }
         }
 
         // flag -> 3: client disconnected
@@ -89,6 +104,8 @@ void* getImg (void* acc_s) {
         std::cerr << "Error removing client folder" << std::endl; // creates folder if doesn't exist
     }
 
+    close(accept_socket);
+
     return NULL;
 }
 
@@ -99,6 +116,8 @@ int main (int argc, char** argv) {
     if (stat("../website/static/images", &sb) != 0) {
         if (system("mkdir ../website/static/images") != 0) {
             std::cerr << "Error creating static/images folder" << std::endl; // creates folder if doesn't exist
+	
+            return 1;
         }
     }
 
